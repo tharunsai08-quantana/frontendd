@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js (or App.tsx if you're using TypeScript)
 
-function App() {
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AppRouter from './routes/AppRouter';
+import Box from '@mui/material/Box';
+import NavBarMain from './pages/NavBarMain';
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+      }}
+    >
+      <Router>
+        <NavBarMain />
+        <Box
+          sx={{
+            flex: 1, 
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <AppRouter />
+        </Box>
+      </Router>
+    </Box>
   );
-}
+};
 
 export default App;
