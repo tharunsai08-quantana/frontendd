@@ -1,242 +1,128 @@
 import React, { useState } from "react";
 import {
-  Box,
   TextField,
   Button,
   Typography,
+  Box,
   Paper,
   Grid,
-  Link,
+  MenuItem,
 } from "@mui/material";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
+import NoToken from "../components/NoToken"; // assuming NoToken.js is in the same folder
 
-const generateCaptcha = () => {
-  const chars = ""; // added characters here
-  let captcha = "";
-  for (let i = 0; i < 1; i++) { // make captcha 6 chars instead of 1
-    captcha += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return captcha;
-};
+const CreateEvent = () => {
+  const token = localStorage.getItem("token");
+  const role = JSON.parse(localStorage.getItem("role"));
 
-const Login = () => {
-  const [name, setName] = useState(""); // changed setEmail to setName for clarity
-  const [password, setPassword] = useState("");
-  const [captcha, setCaptcha] = useState(generateCaptcha());
-  const [userCaptcha, setUserCaptcha] = useState("");
-  const [error, setError] = useState("");
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const navigate = useNavigate();
+  const [eventData, setEventData] = useState({
+    eventId: "",
+    organizer: "",
+    title: "",
+    speaker: "",
+    image: "",
+    hostedBy: "",
+    category: "",
+    description: "",
+    eventDate: "",
+    location: "",
+    createdBy: "",
+  });
 
-  const handleLogin = async () => {
-    if (userCaptcha.toUpperCase() !== captcha) {
-      setError("❌ Invalid CAPTCHA. Please try again.");
-      setCaptcha(generateCaptcha());
-      setUserCaptcha("");
-      return;
-    }
+  const handleChange = (e) => {
+    setEventData({ ...eventData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    if (!token) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/auth/login`, {
+      const res = await fetch("http://localhost:5000/api/events/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name,
-          password,
-        }),
+        body: JSON.stringify(eventData),
       });
-      const data = await response.json();
-    
-      if (data.token) {
-        setError("");
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/dashboard");
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Event created successfully!");
+        setEventData({});
       } else {
-        setError(data.message || "❌ Login failed.");
-        setCaptcha(generateCaptcha());
-        setUserCaptcha("");
+        alert(data.message || "Error creating event");
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      setError("❌ Something went wrong. Please try again.");
-      setCaptcha(generateCaptcha());
-      setUserCaptcha("");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to create event.");
     }
-    
   };
 
-  // Your original colors and styles untouched
-  const blue = "#1976d2";
-  const ash = "#f5f5f5";
-  const inputBorderColor = "#cfd8dc";
+  if (!token) return <NoToken onLoginClick={() => window.location.href = "/login"} />;
+  if (role !== "admin") {
+    return (
+      <Box textAlign="center" mt={10}>
+        <Typography variant="h4" color="error">Access Denied</Typography>
+        <Typography>You do not have permission to create events.</Typography>
+      </Box>
+    );
+  }
 
   return (
-    <Grid
-      container
-      sx={{
-        minHeight: "100vh",
-        backgroundColor: ash,
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      }}
-    >
-      {/* Left panel */}
-      <Grid
-        item
-        xs={12}
-        md={6}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          px: 4,
-          py: 6,
-          backgroundColor: blue,
-          color: "white",
-        }}
-      >
-        <Typography variant="h3" fontWeight="bold" mb={2} textAlign="center">
-          Welcome Back!
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ maxWidth: 400, textAlign: "center", opacity: 0.85 }}
-        >
-          Log in to your account and explore data with real-time insights.
-        </Typography>
-      </Grid>
-
-      {/* Right panel */}
-      <Grid
-        item
-        xs={12}
-        md={6}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          px: 4,
-          py: 6,
-          backgroundColor: ash,
-        }}
-      >
-        <Paper
-          elevation={6}
-          sx={{
-            p: 5,
-            width: "100%",
-            maxWidth: 420,
-            borderRadius: 3,
-            backgroundColor: "white",
-            border: `1px solid ${inputBorderColor}`,
-          }}
-        >
-          <Typography
-            variant="h5"
-            fontWeight={600}
-            mb={4}
-            align="center"
-            color={blue}
-          >
-            User Login
-          </Typography>
-
-          <TextField
-            label="Username"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={name}
-            onChange={(e) => setName(e.target.value)} // fixed setter name
-            autoComplete="email"
-          />
-
-          <TextField
-            label="Password"
-            variant="outlined"
-            type="password"
-            fullWidth
-            margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />
-
-          <Box
-            sx={{
-              my: 3,
-              py: 1.5,
-              textAlign: "center",
-              fontSize: 24,
-              fontWeight: 600,
-              backgroundColor: ash,
-              borderRadius: 2,
-              userSelect: "none",
-              color: blue,
-              border: `2px solid ${blue}`,
-              fontFamily: "'Courier New', Courier, monospace",
-              letterSpacing: 6,
-              cursor: "default",
-            }}
-          >
-            {captcha}
-          </Box>
-
-          <TextField
-            label="Enter CAPTCHA"
-            variant="outlined"
-            fullWidth
-            value={userCaptcha}
-            onChange={(e) => setUserCaptcha(e.target.value)}
-            inputProps={{ style: { letterSpacing: "0.2em" } }}
-          />
-
-          {error && (
-            <Typography color="error" variant="body2" mt={1} textAlign="center">
-              {error}
-            </Typography>
-          )}
-
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{
-              mt: 4,
-              py: 1.8,
-              borderRadius: 2,
-              backgroundColor: blue,
-              fontWeight: "bold",
-              "&:hover": {
-                backgroundColor: "#115293",
-              },
-            }}
-            onClick={handleLogin}
-          >
-            Login
-          </Button>
-
-          <Box
-            mt={3}
-            display="flex"
-            justifyContent="space-between"
-            fontSize="0.9rem"
-            color={blue}
-          >
-            {/* Used react-router-dom's Link for client side navigation */}
-            <Link component={RouterLink} to="#" underline="hover" sx={{ color: blue }}>
-              Forgot Password?
-            </Link>
-            <Link component={RouterLink} to="/signup" underline="hover" sx={{ color: blue }}>
-              Signup
-            </Link>
-          </Box>
-        </Paper>
-      </Grid>
-    </Grid>
+    <Box mt={5} display="flex" justifyContent="center">
+      <Paper sx={{ p: 4, width: "100%", maxWidth: 700 }}>
+        <Typography variant="h5" mb={3}>Create New Event</Typography>
+        <Grid container spacing={2}>
+          {[
+            { label: "Event ID", name: "eventId" },
+            { label: "Organizer", name: "organizer" },
+            { label: "Title", name: "title" },
+            { label: "Speaker", name: "speaker" },
+            { label: "Image URL", name: "image" },
+            { label: "Hosted By", name: "hostedBy" },
+            { label: "Category", name: "category" },
+            { label: "Location", name: "location" },
+            { label: "Created By", name: "createdBy" },
+          ].map((field, index) => (
+            <Grid item xs={12} sm={6} key={index}>
+              <TextField
+                label={field.label}
+                name={field.name}
+                fullWidth
+                value={eventData[field.name]}
+                onChange={handleChange}
+              />
+            </Grid>
+          ))}
+          <Grid item xs={12}>
+            <TextField
+              label="Event Date & Time"
+              type="datetime-local"
+              name="eventDate"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              value={eventData.eventDate}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Description"
+              name="description"
+              fullWidth
+              multiline
+              rows={4}
+              value={eventData.description}
+              onChange={handleChange}
+            />
+          </Grid>
+        </Grid>
+        <Button variant="contained" color="primary" fullWidth sx={{ mt: 3 }} onClick={handleSubmit}>
+          Create Event
+        </Button>
+      </Paper>
+    </Box>
   );
 };
 
-export default Login;
+export default CreateEvent;

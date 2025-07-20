@@ -1,9 +1,12 @@
 import React from "react";
 import { Typography, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import NoToken from "../components/NoToken"; 
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user")) || {};
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -11,7 +14,13 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  const user = JSON.parse(localStorage.getItem("user")) || {};
+  const handleLoginRedirect = () => {
+    navigate("/login");
+  };
+
+  if (!token) {
+    return <NoToken onLoginClick={handleLoginRedirect} />;
+  }
 
   return (
     <Box
@@ -23,6 +32,7 @@ const Dashboard = () => {
         alignItems: "center",
         bgcolor: "#f5f5f5",
         p: 3,
+        textAlign: "center",
       }}
     >
       <Typography variant="h4" mb={2}>
