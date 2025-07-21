@@ -9,12 +9,11 @@ const NavBarMain = () => {
   const isLoggedIn = !!localStorage.getItem('token');
 
   const afterLoginTabs = [
-    { label: 'Home', path: '/dashboard' },  // or '/home' if you have it
+    { label: 'Home', path: '/dashboard' },
     { label: 'Events', path: '/events' },
     { label: 'FAQ', path: '/faq' },
   ];
 
-  // Find active tab index based on current path
   const getTabIndex = () => {
     const idx = afterLoginTabs.findIndex(tab => location.pathname.startsWith(tab.path));
     return idx === -1 ? false : idx;
@@ -29,12 +28,18 @@ const NavBarMain = () => {
   return (
     <AppBar position="static" sx={{ bgcolor: '#1976d2' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h6" sx={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
-          MyApp
+        {/* Left Side: Logo */}
+        <Typography
+          variant="h6"
+          sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+          onClick={() => navigate('/')}
+        >
+          Event Management
         </Typography>
 
-        {isLoggedIn && (
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+        {/* Right Side: Tabs + Buttons */}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {isLoggedIn && (
             <Tabs
               value={getTabIndex()}
               textColor="inherit"
@@ -60,10 +65,9 @@ const NavBarMain = () => {
                 />
               ))}
             </Tabs>
-          </Box>
-        )}
+          )}
 
-        <Box>
+          {/* Auth Buttons */}
           {!isLoggedIn ? (
             <>
               <Button color="inherit" onClick={() => navigate('/login')}>

@@ -25,13 +25,13 @@ const AllEvents = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const email = user?.email;
-  
+
       const res = await axios.post("http://localhost:8000/auth/show_events", {
         email,
       });
-  
+
       const fetched = res.data;
-  
+
       if (Array.isArray(fetched)) {
         setEvents(fetched);
       } else if (Array.isArray(fetched.events)) {
@@ -55,7 +55,6 @@ const AllEvents = () => {
       setLoading(false);
     }
   };
-  
 
   const handleApply = async (event) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -153,45 +152,80 @@ const AllEvents = () => {
     <>
       <Grid container spacing={3} justifyContent="center" mt={2}>
         {events.map((event) => (
-          <Grid item xs={12} md={6} lg={5} key={event._id}>
+          <Grid
+            item
+            xs={12}
+            display="flex"
+            justifyContent="center"
+            key={event._id}
+          >
             <Card
               sx={{
-                height: "100%",
+                width: "80vw",
+                height: "10vh",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
                 boxShadow: 4,
                 borderRadius: 3,
                 p: 2,
+                overflow: "hidden",
               }}
             >
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {event.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mb={1}>
-                  {event.description}
-                </Typography>
-                <Typography variant="body2" mb={0.5}>
-                  <strong>Date:</strong>{" "}
-                  {new Date(event.eventDate).toLocaleDateString()}
-                </Typography>
-                <Typography variant="body2" mb={0.5}>
-                  <strong>Speaker:</strong> {event.speaker}
-                </Typography>
-                <Typography variant="body2" mb={1}>
-                  <strong>Location:</strong> {event.location}
-                </Typography>
-              </CardContent>
-              <Box textAlign="right">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleApply(event)}
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  p: 0,
+                }}
+              >
+                <Box sx={{ flexGrow: 1, pr: 2, overflow: "hidden" }}>
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    sx={{ fontWeight: "bold", mb: 0.5 }}
+                  >
+                    {event.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    noWrap
+                    sx={{ mb: 0.5 }}
+                  >
+                    {event.description}
+                  </Typography>
+                  <Typography variant="body2" noWrap>
+                    <strong>Date:</strong>{" "}
+                    {new Date(event.eventDate).toLocaleDateString()}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    minWidth: 120,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                  }}
                 >
-                  Apply
-                </Button>
-              </Box>
+                  <Typography variant="body2" noWrap>
+                    <strong>Speaker:</strong> {event.speaker}
+                  </Typography>
+                  <Typography variant="body2" noWrap mb={1}>
+                    <strong>Location:</strong> {event.location}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => handleApply(event)}
+                  >
+                    Apply
+                  </Button>
+                </Box>
+              </CardContent>
             </Card>
           </Grid>
         ))}

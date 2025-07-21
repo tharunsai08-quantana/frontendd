@@ -236,7 +236,7 @@ const Signup = () => {
             variant="h6"
             sx={{ mt: 2, maxWidth: 300, textAlign: "center" }}
           >
-            Already have an account? Log in to access your xx!
+            Already have an account? Log in to access!
           </Typography>
           <Button
             variant="outlined"

@@ -1,7 +1,8 @@
 import React from "react";
-import { Typography, Button, Box } from "@mui/material";
+import { Typography, Button, Box, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import NoToken from "../components/NoToken"; 
+import NoToken from "../components/NoToken";
+
 const Dashboard = () => {
   const navigate = useNavigate();
 
@@ -26,24 +27,36 @@ const Dashboard = () => {
     <Box
       sx={{
         height: "100vh",
+        bgcolor: "#f5f5f5",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        bgcolor: "#f5f5f5",
-        p: 3,
-        textAlign: "center",
+        px: 4,
       }}
     >
-      <Typography variant="h4" mb={2}>
+      <Typography variant="h3" gutterBottom>
         Welcome, {user.name || "User"}!
       </Typography>
-      <Typography variant="body1" mb={4}>
-        This is your dashboard.
+      <Typography variant="h6" mb={4}>
+        Manage your events efficiently with our dashboard.
       </Typography>
-      <Button variant="contained" color="error" onClick={handleLogout}>
-        Logout
-      </Button>
+
+      <Grid container spacing={2} justifyContent="center" mb={4}>
+
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => navigate("/events")}
+          >
+            View  Events
+          </Button>
+        </Grid>
+       
+      </Grid>
+
+
     </Box>
   );
 };
