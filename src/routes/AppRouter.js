@@ -1,16 +1,36 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+
 import LandingPage from '../pages/LandingPage';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import ForgotPassword from '../pages/ForgotPassword';
 import Dashboard from '../pages/Dashboard';
+
 import CreateEventForm from '../Events/CreateEventForm';
 import EventsDashboard from '../Events/EventsDashboard';
+
 import AdminEventsDashboard from '../AmdinPages/AdminEventsDashboard';
-import AdminRoute from '../components/AdminRoute';
-import NoToken from '../components/NoToken'; 
-import AdminAllEvents from '../AmdinPages/AdminAllEvents'; 
+import AdminAllEvents from '../AmdinPages/AdminAllEvents';
+
+import NoToken from '../components/NoToken';
+
+/**
+ * Helper component to handle protected route logic
+ */
+const ProtectedRoute = ({ children, role }) => {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  if (!token) return <NoToken />;
+
+  if (role && user?.role !== role) {
+    return <NoToken />;
+  }
+
+  return children;
+};
+
 const AppRouter = () => {
   return (
     <Routes>
@@ -19,41 +39,43 @@ const AppRouter = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/forgot_password" element={<ForgotPassword />} />
       <Route path="/dashboard" element={<Dashboard />} />
+
+      {/* Admin-only route */}
       <Route
         path="/create-event"
         element={
-          localStorage.getItem("token") ? (
-            <AdminRoute>
-              <CreateEventForm />
-            </AdminRoute>
-          ) : (
-            <NoToken />
-          )
+          <ProtectedRoute role="admin">
+            <CreateEventForm />
+          </ProtectedRoute>
         }
       />
-      
 
+      {/* Events Route: Show Admin or User dashboard based on role */}
+      <Route
+        path="/events"
+        element={
+          <ProtectedRoute>
+            {JSON.parse(localStorage.getItem("user") || "{}")?.role === "admin" ? (
+              <AdminEventsDashboard />
+            ) : (
+              <EventsDashboard />
+            )}
+          </ProtectedRoute>
+        }
+      />
 
+      {/* Optional: route for viewing all events (admin only?) */}
+      <Route
+        path="/admin/events"
+        element={
+          <ProtectedRoute role="admin">
+            <AdminAllEvents />
+          </ProtectedRoute>
+        }
+      />
 
-<Route
-  path="/events"
-  element={
-    isLoggedIn ? (
-      isAdmin ? (
-        <AdminRoute>
-          <AdminEventsDashboard />
-        </AdminRoute>
-      ) : (
-        <EventsDashboard />
-      )
-    ) : (
-      <NoToken />
-    )
-  }
-/>
-
-
-      <Route path="*" element={<LandingPage />} /> {/* fallback */}
+      {/* Catch-all fallback */}
+      <Route path="*" element={<LandingPage />} />
     </Routes>
   );
 };
