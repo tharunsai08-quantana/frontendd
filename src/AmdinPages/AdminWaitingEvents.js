@@ -34,11 +34,7 @@ const ApprovedEvents = () => {
       const email = parsed?.email;
       const role = parsed?.role;
 
-      if (!email || !role) {
-        console.warn("Missing email or role in user data");
-        return;
-      }
-
+    
       console.log("Calling API: /auth/applied_event with", { email, role });
 
       const res = await axios.post("http://localhost:8000/auth/applied_event", {

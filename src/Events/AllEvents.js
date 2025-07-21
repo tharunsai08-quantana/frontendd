@@ -89,7 +89,6 @@ const AllEvents = () => {
         severity: "success",
       });
 
-      // Remove the applied event from the list
       setEvents((prevEvents) =>
         prevEvents.filter((e) => e.eventId !== event.eventId)
       );
@@ -128,7 +127,6 @@ const AllEvents = () => {
         <Typography variant="h6" color="text.secondary">
           No upcoming events available.
         </Typography>
-
         <Snackbar
           open={snackbar.open}
           autoHideDuration={3000}
@@ -150,71 +148,71 @@ const AllEvents = () => {
 
   return (
     <>
-      <Grid container spacing={3} justifyContent="center" mt={2}>
+      <Grid
+        container
+        spacing={3}
+        justifyContent="center"
+        alignItems="stretch"
+        mt={2}
+      >
         {events.map((event) => (
-          <Grid
-            item
-            xs={12}
-            display="flex"
-            justifyContent="center"
-            key={event._id}
-          >
+          <Grid item xs={12} md={10} lg={8} key={event._id}>
             <Card
               sx={{
-                width: "80vw",
-                height: "10vh",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                boxShadow: 4,
+                width: "100%",
+                backgroundColor: "#f5f5f5",
+                boxShadow: 3,
                 borderRadius: 3,
                 p: 2,
-                overflow: "hidden",
+                transition: "0.3s",
+                "&:hover": {
+                  boxShadow: 6,
+                },
               }}
             >
               <CardContent
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
+                  flexWrap: "wrap",
                   justifyContent: "space-between",
-                  alignItems: "center",
-                  p: 0,
+                  gap: 2,
                 }}
               >
-                <Box sx={{ flexGrow: 1, pr: 2, overflow: "hidden" }}>
+                {/* Left Content */}
+                <Box sx={{ flex: 1, minWidth: "250px" }}>
                   <Typography
                     variant="h6"
-                    noWrap
-                    sx={{ fontWeight: "bold", mb: 0.5 }}
+                    sx={{ fontWeight: "bold", mb: 1, wordBreak: "break-word" }}
                   >
                     {event.title}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    noWrap
-                    sx={{ mb: 0.5 }}
+                    sx={{ mb: 1, whiteSpace: "pre-wrap" }}
                   >
                     {event.description}
                   </Typography>
-                  <Typography variant="body2" noWrap>
+                  <Typography variant="body2">
                     <strong>Date:</strong>{" "}
                     {new Date(event.eventDate).toLocaleDateString()}
                   </Typography>
                 </Box>
 
+                {/* Right Content */}
                 <Box
                   sx={{
-                    minWidth: 120,
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "flex-end",
+                    justifyContent: "space-between",
+                    minWidth: "180px",
+                    gap: 1,
                   }}
                 >
-                  <Typography variant="body2" noWrap>
+                  <Typography variant="body2">
                     <strong>Speaker:</strong> {event.speaker}
                   </Typography>
-                  <Typography variant="body2" noWrap mb={1}>
+                  <Typography variant="body2">
                     <strong>Location:</strong> {event.location}
                   </Typography>
                   <Button

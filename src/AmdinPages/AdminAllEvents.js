@@ -136,7 +136,7 @@ const AdminAllEvents = () => {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  backgroundColor: "#f5f5f5",
+                  backgroundColor: "#e0f7fa",
                   boxShadow: 2,
                   borderRadius: 2,
                   p: 2,
