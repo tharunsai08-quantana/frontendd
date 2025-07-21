@@ -14,14 +14,9 @@ import AdminAllEvents from '../AmdinPages/AdminAllEvents';
 
 import NoToken from '../components/NoToken';
 
-/**
- * Helper component to handle protected route logic
- */
 const ProtectedRoute = ({ children, role }) => {
-  const token = localStorage.getItem("token");
+  // Only enforce role check, don't check token here
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-  if (!token) return <NoToken />;
 
   if (role && user?.role !== role) {
     return <NoToken />;
@@ -40,7 +35,6 @@ const AppRouter = () => {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/faq" element={<UnderMaintenance />} />
 
-      {/* Admin-only route */}
       <Route
         path="/create-event"
         element={
@@ -50,30 +44,22 @@ const AppRouter = () => {
         }
       />
 
-<Route
-  path="/events"
-  element={
-    <ProtectedRoute>
-      {(() => {
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
-        return user?.role === "admin" ? <AdminEventsDashboard /> : <AdminEventsDashboard />;
-      })()}
-    </ProtectedRoute>
-  }
-/>
-
-
-      {/* Optional: route for viewing all events (admin only?) */}
       <Route
-        path="/admin/events"
+        path="/events"
         element={
-          <ProtectedRoute role="admin">
-            <AdminAllEvents />
+          <ProtectedRoute>
+            {(() => {
+              const user = JSON.parse(localStorage.getItem("user") || "{}");
+              return user?.role === "admin" ? (
+                <AdminEventsDashboard />
+              ) : (
+                <EventsDashboard />
+              );
+            })()}
           </ProtectedRoute>
         }
       />
 
-      {/* Catch-all fallback */}
       <Route path="*" element={<LandingPage />} />
     </Routes>
   );

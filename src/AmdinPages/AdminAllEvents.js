@@ -123,20 +123,22 @@ const AdminAllEvents = () => {
 
   return (
     <>
-      <Grid container spacing={3} justifyContent="center" mt={2}>
+      <Grid container spacing={3} mt={2} px={3}>
         {events.map((event) => {
           const isEditing = editingEventId === event.eventId;
 
           return (
-            <Grid item xs={12} md={6} lg={5} key={event._id}>
+            <Grid item xs={12} md={6} lg={4} key={event._id}>
               <Card
                 sx={{
-                  height: "100%",
+                  width: "100%",
+                  height: "auto",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  boxShadow: 4,
-                  borderRadius: 3,
+                  backgroundColor: "#f5f5f5",
+                  boxShadow: 2,
+                  borderRadius: 2,
                   p: 2,
                 }}
               >
