@@ -36,10 +36,7 @@ const CreateEventForm = () => {
     if (storedToken) {
       try {
         const decoded = JSON.parse(atob(storedToken.split(".")[1]));
-        if (decoded.role === "admin") {
-          setIsAdmin(true);
-          setToken(storedToken);
-        }
+
       } catch (err) {
         console.warn("Invalid token");
       }

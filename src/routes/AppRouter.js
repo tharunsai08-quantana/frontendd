@@ -31,11 +31,28 @@ const AppRouter = () => {
           )
         }
       />
-      {/* <Route path="/admin_events" element={<AdminAllEvents />} /> */}
-      <Route path="/admin_events" element={<AdminEventsDashboard />} />
-
       
-      <Route path="/events" element={localStorage.getItem("token") ? ( <EventsDashboard />):(<NoToken />)} />   
+
+
+
+<Route
+  path="/events"
+  element={
+    isLoggedIn ? (
+      isAdmin ? (
+        <AdminRoute>
+          <AdminEventsDashboard />
+        </AdminRoute>
+      ) : (
+        <EventsDashboard />
+      )
+    ) : (
+      <NoToken />
+    )
+  }
+/>
+
+
       <Route path="*" element={<LandingPage />} /> {/* fallback */}
     </Routes>
   );

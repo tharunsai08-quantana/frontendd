@@ -6,8 +6,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Paper,
 } from "@mui/material";
+
 import AdminAllEvents from "./AdminAllEvents";
 import AdminWaitingEvents from "./AdminWaitingEvents";
 import AdminApprovedEvents from "./AdminApprovedEvents";
@@ -41,7 +41,7 @@ const AdminEventsDashboard = () => {
             component="legend"
             sx={{ color: "#2d3436", fontWeight: "bold", mb: 1 }}
           >
-            
+            Select View
           </FormLabel>
           <RadioGroup
             row

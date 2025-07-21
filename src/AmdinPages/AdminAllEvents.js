@@ -16,6 +16,7 @@ import axios from "axios";
 const AdminAllEvents = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [noEventsMessage, setNoEventsMessage] = useState("");
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -33,7 +34,13 @@ const AdminAllEvents = () => {
         email,
       });
 
-      setEvents(res.data || []);
+      if (res.data.message === "No events found") {
+        setNoEventsMessage(res.data.message);
+        setEvents([]);
+      } else {
+        setEvents(res.data || []);
+        setNoEventsMessage("");
+      }
     } catch (err) {
       console.error("Error fetching events", err);
       setSnackbar({
@@ -99,6 +106,16 @@ const AdminAllEvents = () => {
         <CircularProgress />
         <Typography variant="body2" mt={2}>
           Loading events...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (noEventsMessage) {
+    return (
+      <Box textAlign="center" mt={10}>
+        <Typography variant="h5" color="textSecondary">
+          {noEventsMessage}
         </Typography>
       </Box>
     );
