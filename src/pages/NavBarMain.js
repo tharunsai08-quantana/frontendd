@@ -10,7 +10,7 @@ const NavBarMain = () => {
 
   const afterLoginTabs = [
     { label: 'Home', path: '/dashboard' },
-    { label: 'Events', path: '/events' },
+    { label: 'Events', path: '/events_dashboard' },
     { label: 'FAQ', path: '/faq' },
   ];
 

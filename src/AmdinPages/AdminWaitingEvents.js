@@ -12,54 +12,41 @@ const ApprovedEvents = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const userData = localStorage.getItem("user");
-  let email = null;
-  let role = null;
-
-  try {
-    const parsed = JSON.parse(userData);
-    email = parsed?.email;
-    role = parsed?.role;
-  } catch (err) {
-    console.warn("Invalid user data in localStorage");
-  }
-
-
-
   useEffect(() => {
-  const fetchApprovedEvents = async () => {
-    try {
-      const userData = localStorage.getItem("user");
-      const parsed = JSON.parse(userData);
-      const email = parsed?.email;
-      const role = parsed?.role;
+    const fetchApprovedEvents = async () => {
+      try {
+        const userData = localStorage.getItem("user");
+        const parsed = JSON.parse(userData);
+        const email = parsed?.email;
+        const role = parsed?.role;
 
-    
-      console.log("Calling API: /auth/applied_event with", { email, role });
+        const res = await axios.post("http://localhost:8000/auth/applied_event", {
+          email,
+          role,
+        });
 
-      const res = await axios.post("http://localhost:8000/auth/applied_event", {
-        email,
-        role,
-      });
+        const applied = res.data.data?.filter((e) => e.status === "Applied") || [];
+        setApprovedEvents(applied);
+      } catch (err) {
+        console.error("Error fetching approved events", err?.response?.data || err.message);
+      }
+    };
 
-      console.log("API response:", res.data);
-
-      const applied = res.data.data?.filter((e) => e.status === "Applied") || [];
-      setApprovedEvents(applied);
-    } catch (err) {
-      console.error("Error fetching approved events", err?.response?.data || err.message);
-    }
-  };
-
-  fetchApprovedEvents();
-}, []); // Only run once on component mount
-
-
+    fetchApprovedEvents();
+  }, []);
 
   const handleSelect = (eventId) => {
     setSelected((prev) =>
-      prev.includes(eventId) ? prev.filter((id) => id !== eventId) : [...prev, eventId]
+      prev.includes(eventId)
+        ? prev.filter((id) => id !== eventId)
+        : [...prev, eventId]
     );
+  };
+
+  const handleSelectAll = () => {
+    const allIds = filteredEvents.map((e) => e._id);
+    const allSelected = allIds.every((id) => selected.includes(id));
+    setSelected(allSelected ? [] : allIds);
   };
 
   const handleBulkApprove = async () => {
@@ -139,7 +126,12 @@ const ApprovedEvents = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Select</TableCell>
+              <TableCell
+                onClick={handleSelectAll}
+                style={{ cursor: "pointer", fontWeight: "bold" }}
+              >
+                {selected.length === filteredEvents.length ? "Deselect All" : "Select All"}
+              </TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
@@ -181,7 +173,7 @@ const ApprovedEvents = () => {
           onClick={handleBulkApprove}
           disabled={loading}
         >
-          {loading ? "Approving..." : "Approve Selected"}
+          {loading ? "Approving..." : `Approve ${selected.length} Selected`}
         </Button>
       )}
     </Paper>

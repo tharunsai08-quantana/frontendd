@@ -38,7 +38,7 @@ const AppliedEvents = () => {
 
   const handleDelete = async (eventId) => {
     try {
-      await axios.post("http://localhost:8000/auth/delete_applied_event", {
+      await axios.post("http://localhost:8000/auth/delete_event", {
         email,
         eventId,
       });

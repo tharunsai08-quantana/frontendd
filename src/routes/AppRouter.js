@@ -7,42 +7,66 @@ import Signup from '../pages/Signup';
 import ForgotPassword from '../pages/ForgotPassword';
 import Dashboard from '../pages/Dashboard';
 import UnderMaintenance from '../pages/UnderMaintenance';
-
 import CreateEventForm from '../Events/CreateEventForm';
 import EventsDashboard from '../Events/EventsDashboard';
 import AdminEventsDashboard from '../AmdinPages/AdminEventsDashboard';
-import AdminAllEvents from '../AmdinPages/AdminAllEvents';
-
+import ValidateCodePage from '../mediater/ValidateCodePage';
 import NoToken from '../components/NoToken';
-import AdminRoute from '../components/AdminRoute';
+
+/**
+ * ProtectedRoute checks token and role
+ */
+const ProtectedRoute = ({ children, role }) => {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  if (!token) return <NoToken />;
+  if (role && user?.role !== role) return <NoToken />;
+
+  return children;
+};
+
+/**
+ * Component to switch dashboard based on role
+ */
+const EventsRoleSwitcher = () => {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  if (user?.role === "admin") return <AdminEventsDashboard />;
+  if (user?.role === "user") return <EventsDashboard />;
+  return <NoToken />;
+};
 
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/forgot_password" element={<ForgotPassword />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/faq" element={<UnderMaintenance />} />
+      <Route path="/" element={<LandingPage />} /> {/* Public Landing Page */}
+      <Route path="/login" element={<Login />} />   {/* Login Page */}
+      <Route path="/signup" element={<Signup />} /> {/* Signup Page */}
+      <Route path="/forgot_password" element={<ForgotPassword />} /> {/* Forgot Password */}
+      <Route path="/dashboard" element={<Dashboard />} /> {/* User Dashboard */}
+      <Route path="/faq" element={<UnderMaintenance />} /> {/* Temporary FAQ Page */}
+      <Route path="/validate_code" element={<ValidateCodePage />} /> {/* Temporary FAQ Page */}
 
       <Route
-        path="/events"
+        path="/create-event"
         element={
-            <EventsDashboard />
+          <ProtectedRoute role="admin">
+            <CreateEventForm />
+          </ProtectedRoute>
         }
-      />
+      /> {/* Admin Create Event */}
 
       <Route
-        path="/admin/events"
+        path="/events_dashboard"
         element={
-          <AdminRoute>
-            <AdminEventsDashboard />
-          </AdminRoute>
+          <ProtectedRoute>
+            <EventsRoleSwitcher />
+          </ProtectedRoute>
         }
-      />
-  
-      <Route path="*" element={<LandingPage />} />
+      /> 
+
+      <Route path="*" element={<LandingPage />} /> {/* Catch-all fallback */}
     </Routes>
   );
 };

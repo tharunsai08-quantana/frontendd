@@ -3,7 +3,7 @@ import {
   Table, TableHead, TableRow, TableCell, TableBody,
   TableContainer, Paper, TableSortLabel, Dialog,
   DialogTitle, DialogContent, DialogActions,
-  Button, Typography
+  Button, Typography, TextField
 } from "@mui/material";
 import axios from "axios";
 
@@ -13,16 +13,14 @@ const ApprovedEvents = () => {
   const [open, setOpen] = useState(false);
   const [orderBy, setOrderBy] = useState("title");
   const [order, setOrder] = useState("asc");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchApprovedEvents = async () => {
       try {
         const res = await axios.get("http://localhost:8000/auth/approved_events");
-
-        // Updated to match your payload structure
         const approved = res.data.events?.filter((e) => e.status === "Approved") || [];
         setApprovedEvents(approved);
-        console.log("Fetched approved events:", approved);
       } catch (err) {
         console.error("Error fetching approved events", err);
       }
@@ -51,6 +49,12 @@ const ApprovedEvents = () => {
     }
   });
 
+  const filteredEvents = sortedEvents.filter((event) =>
+    `${event.title} ${event.name} ${new Date(event.eventDate).toLocaleString()}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
   const handleShowQR = (event) => {
     setSelectedQR(event);
     setOpen(true);
@@ -59,9 +63,22 @@ const ApprovedEvents = () => {
   const handleClose = () => setOpen(false);
 
   return (
-    <>
-      <TableContainer component={Paper} sx={{ mt: 3 }}>
-        <Table>
+    <Paper sx={{ p: 3, maxWidth: 1200, margin: "auto", mt: 4 }}>
+      <Typography variant="h5" mb={2}>
+        Approved Events
+      </Typography>
+
+      <TextField
+        label="Search by title, name, or date"
+        variant="outlined"
+        fullWidth
+        sx={{ mb: 2 }}
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -88,14 +105,14 @@ const ApprovedEvents = () => {
                   direction={orderBy === "eventDate" ? order : "asc"}
                   onClick={() => handleSort("eventDate")}
                 >
-                  Date
+                  Event Date
                 </TableSortLabel>
               </TableCell>
               <TableCell>QR Code</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedEvents.map((event) => (
+            {filteredEvents.map((event) => (
               <TableRow key={event._id}>
                 <TableCell>{event.title}</TableCell>
                 <TableCell>{event.name}</TableCell>
@@ -111,15 +128,15 @@ const ApprovedEvents = () => {
         </Table>
       </TableContainer>
 
-      {/* QR Code Dialog */}
+      {/* QR Modal */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Event QR & Key</DialogTitle>
         <DialogContent>
           {selectedQR && (
             <>
-              <Typography variant="subtitle2" gutterBottom>Key ID:</Typography>
+              <Typography variant="subtitle2">Key ID:</Typography>
               <Typography variant="body2" mb={2}>{selectedQR.keyId}</Typography>
-              <img src={selectedQR.qrCode} alt="QR Code" style={{ width: "200px" }} />
+              <img src={selectedQR.qrCode} alt="QR Code" style={{ width: 200, marginTop: 10 }} />
             </>
           )}
         </DialogContent>
@@ -127,7 +144,7 @@ const ApprovedEvents = () => {
           <Button onClick={handleClose} variant="contained">Close</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Paper>
   );
 };
 

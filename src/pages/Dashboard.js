@@ -48,7 +48,7 @@ const Dashboard = () => {
           <Button
             variant="outlined"
             color="primary"
-            onClick={() => navigate("/events")}
+            onClick={() => navigate("/events_dashboard")}
           >
             View  Events
           </Button>

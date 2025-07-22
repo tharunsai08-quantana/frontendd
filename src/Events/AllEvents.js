@@ -157,19 +157,24 @@ const AllEvents = () => {
       >
         {events.map((event) => (
           <Grid item xs={12} md={10} lg={8} key={event._id}>
-            <Card
-              sx={{
-                width: "100%",
-                backgroundColor: "#f5f5f5",
-                boxShadow: 3,
-                borderRadius: 3,
-                p: 2,
-                transition: "0.3s",
-                "&:hover": {
-                  boxShadow: 6,
-                },
-              }}
-            >
+           <Card
+  sx={{
+    width: "100%",
+    height: 260, // Fixed height for uniform card size
+    backgroundColor: "#f5f5f5",
+    boxShadow: 3,
+    borderRadius: 3,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    p: 2,
+    transition: "0.3s",
+    "&:hover": {
+      boxShadow: 6,
+    },
+  }}
+>
+
               <CardContent
                 sx={{
                   display: "flex",
