@@ -12,63 +12,55 @@ import EventsDashboard from '../Events/EventsDashboard';
 import AdminEventsDashboard from '../AmdinPages/AdminEventsDashboard';
 import Mdashboard from '../mediater/Mdashboard';
 import NoToken from '../components/NoToken';
+import LayoutWrapper from './LayoutWrapper';
 
-/**
- * ProtectedRoute checks token and role
- */
 const ProtectedRoute = ({ children, role }) => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-
   if (!token) return <NoToken />;
   if (role && user?.role !== role) return <NoToken />;
-
   return children;
 };
 
-/**
- * Component to switch dashboard based on role
- */
 const EventsRoleSwitcher = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-
   if (user?.role === "admin") return <AdminEventsDashboard />;
   if (user?.role === "user") return <EventsDashboard />;
   if (user?.role === "gatekeeper") return <Mdashboard />;
-
   return <NoToken />;
 };
 
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} /> {/* Public Landing Page */}
-      <Route path="/login" element={<Login />} />   {/* Login Page */}
-      <Route path="/signup" element={<Signup />} /> {/* Signup Page */}
-      <Route path="/forgot_password" element={<ForgotPassword />} /> {/* Forgot Password */}
-      <Route path="/dashboard" element={<Dashboard />} /> {/* User Dashboard */}
-      <Route path="/faq" element={<UnderMaintenance />} /> {/* Temporary FAQ Page */}
-      <Route path="/client" element={<Mdashboard />} /> {/* Temporary FAQ Page */}
-
+      <Route path="/" element={<LayoutWrapper><LandingPage /></LayoutWrapper>} />
+      <Route path="/login" element={<LayoutWrapper><Login /></LayoutWrapper>} />
+      <Route path="/signup" element={<LayoutWrapper><Signup /></LayoutWrapper>} />
+      <Route path="/forgot_password" element={<LayoutWrapper><ForgotPassword /></LayoutWrapper>} />
+      <Route path="/dashboard" element={<LayoutWrapper><Dashboard /></LayoutWrapper>} />
+      <Route path="/faq" element={<LayoutWrapper><UnderMaintenance /></LayoutWrapper>} />
+      <Route path="/client" element={<LayoutWrapper><Mdashboard /></LayoutWrapper>} />
       <Route
         path="/create-event"
         element={
           <ProtectedRoute role="admin">
-            <CreateEventForm />
+            <LayoutWrapper>
+              <CreateEventForm />
+            </LayoutWrapper>
           </ProtectedRoute>
         }
-      /> {/* Admin Create Event */}
-
+      />
       <Route
         path="/events_dashboard"
         element={
           <ProtectedRoute>
-            <EventsRoleSwitcher />
+            <LayoutWrapper>
+              <EventsRoleSwitcher />
+            </LayoutWrapper>
           </ProtectedRoute>
         }
-      /> 
-
-      <Route path="*" element={<LandingPage />} /> {/* Catch-all fallback */}
+      />
+      <Route path="*" element={<LayoutWrapper><LandingPage /></LayoutWrapper>} />
     </Routes>
   );
 };
