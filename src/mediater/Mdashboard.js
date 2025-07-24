@@ -8,12 +8,28 @@ import {
   Radio,
 } from "@mui/material";
 
-import AdminAllEvents from "./AdminAllEvents";
-import AdminWaitingEvents from "./AdminWaitingEvents";
-import AdminApprovedEvents from "./AdminApprovedEvents";
-import AdminAttende from "./AdminAttende";
-const AdminEventsDashboard = () => {
-  const [view, setView] = useState("all");
+import ValidateCodePage from "./ValidateCodePage";
+import VerifiedList from "./verifiedList";
+import EventsCreated from "./EventsCreated";
+
+const Mdashboard = () => {
+  const [view, setView] = useState("validate");
+
+  const views = {
+        created: {
+      label: "Events Created",
+      component: <EventsCreated />,
+    },
+    validate: {
+      label: "Validate Code",
+      component: <ValidateCodePage />,
+    },
+    verified: {
+      label: "Verified Users",
+      component: <VerifiedList />,
+    },
+
+  };
 
   return (
     <Box
@@ -47,22 +63,23 @@ const AdminEventsDashboard = () => {
             value={view}
             onChange={(e) => setView(e.target.value)}
           >
-            <FormControlLabel value="all" control={<Radio />} label="All Events" />
-            <FormControlLabel value="applied" control={<Radio />} label="Waiting Events" />
-            <FormControlLabel value="approved" control={<Radio />} label="Approved Events" />
-            <FormControlLabel value="attended" control={<Radio />} label="Attended Users" />
+            {Object.entries(views).map(([key, { label }]) => (
+              <FormControlLabel
+                key={key}
+                value={key}
+                control={<Radio />}
+                label={label}
+              />
+            ))}
           </RadioGroup>
         </FormControl>
       </Box>
 
       <Box sx={{ width: "100%", maxWidth: "1200px", px: 2 }}>
-        {view === "all" && <AdminAllEvents />}
-        {view === "applied" && <AdminWaitingEvents />}
-        {view === "approved" && <AdminApprovedEvents />}
-        {view === "attended" && <AdminAttende />}
+        {views[view].component}
       </Box>
     </Box>
   );
 };
 
-export default AdminEventsDashboard;
+export default Mdashboard;

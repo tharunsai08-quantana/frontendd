@@ -1,6 +1,7 @@
 import React from "react";
 import AdminEventsDashboard from "./AdminEventsDashboard";
 import EventsDashboard from "./EventsDashboard";
+import Mdashboard from "../mediater/Mdashboard";
 
 const EventsRoleSwitcher = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -9,7 +10,10 @@ const EventsRoleSwitcher = () => {
     return <AdminEventsDashboard />;
   } else if (user?.role === "user") {
     return <EventsDashboard />;
-  } else {
+  } 
+   else if (user?.role === "gatekeeper") {
+    return <Mdashboard />;
+  }else {
     return <div>Unauthorized</div>;
   }
 };

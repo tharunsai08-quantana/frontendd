@@ -72,14 +72,14 @@ const Signup = () => {
   
         const data = await res.json();
         if (res.status === 201) {
-          setMessage(`✅ ${data.message}`);
+          setMessage(` ${data.message}`);
           setTimeout(() => navigate("/login"), 3500);
         } else {
-          setMessage(`❌ ${data.message || "Signup failed"}`);
+          setMessage(` ${data.message || "Signup failed"}`);
         }
       } catch (err) {
         console.error("Signup error:", err);
-        setMessage("❌ Something went wrong. Please try again.");
+        setMessage(" Something went wrong. Please try again.");
       }
     }
   

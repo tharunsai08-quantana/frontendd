@@ -10,7 +10,7 @@ import UnderMaintenance from '../pages/UnderMaintenance';
 import CreateEventForm from '../Events/CreateEventForm';
 import EventsDashboard from '../Events/EventsDashboard';
 import AdminEventsDashboard from '../AmdinPages/AdminEventsDashboard';
-import ValidateCodePage from '../mediater/ValidateCodePage';
+import Mdashboard from '../mediater/Mdashboard';
 import NoToken from '../components/NoToken';
 
 /**
@@ -34,6 +34,8 @@ const EventsRoleSwitcher = () => {
 
   if (user?.role === "admin") return <AdminEventsDashboard />;
   if (user?.role === "user") return <EventsDashboard />;
+  if (user?.role === "gatekeeper") return <Mdashboard />;
+
   return <NoToken />;
 };
 
@@ -46,7 +48,7 @@ const AppRouter = () => {
       <Route path="/forgot_password" element={<ForgotPassword />} /> {/* Forgot Password */}
       <Route path="/dashboard" element={<Dashboard />} /> {/* User Dashboard */}
       <Route path="/faq" element={<UnderMaintenance />} /> {/* Temporary FAQ Page */}
-      <Route path="/validate_code" element={<ValidateCodePage />} /> {/* Temporary FAQ Page */}
+      <Route path="/client" element={<Mdashboard />} /> {/* Temporary FAQ Page */}
 
       <Route
         path="/create-event"
