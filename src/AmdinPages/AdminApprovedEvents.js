@@ -18,7 +18,7 @@ const ApprovedEvents = () => {
   useEffect(() => {
     const fetchApprovedEvents = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/auth/approved_events");
+        const res = await axios.get("https://backend-l2dd.onrender.com/auth/approved_events");
         const approved = res.data.events?.filter((e) => e.status === "Approved") || [];
         setApprovedEvents(approved);
       } catch (err) {

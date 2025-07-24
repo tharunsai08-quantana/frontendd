@@ -18,7 +18,7 @@ const EventStatsDashboard = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/auth/event_data");
+        const res = await axios.get("https://backend-l2dd.onrender.com/auth/event_data");
         setEvents(res.data.nextEvents || []);
       } catch (err) {
         console.error("Error fetching event stats", err);

@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Button, Box, Grid } from "@mui/material";
+import { Typography, Button, Box, Grid, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import NoToken from "../components/NoToken";
 
@@ -27,36 +27,50 @@ const Dashboard = () => {
     <Box
       sx={{
         height: "100vh",
-        bgcolor: "#f5f5f5",
+        background: "linear-gradient(to right, #e0f7fa, #80deea)",
         display: "flex",
-        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        px: 4,
+        px: 2,
       }}
     >
-      <Typography variant="h3" gutterBottom>
-        Welcome, {user.name || "User"}!
-      </Typography>
-      <Typography variant="h6" mb={4}>
-        Manage your events efficiently with our dashboard.
-      </Typography>
+      <Paper
+        elevation={6}
+        sx={{
+          p: 6,
+          maxWidth: 600,
+          width: "100%",
+          textAlign: "center",
+          bgcolor: "#ffffffee",
+          borderRadius: 4,
+        }}
+      >
+        <Typography variant="h3" gutterBottom color="primary">
+          Welcome, {user.name || "User"}!
+        </Typography>
+        <Typography variant="h6" mb={4}>
+          Manage your events efficiently with our dashboard.
+        </Typography>
 
-      <Grid container spacing={2} justifyContent="center" mb={4}>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="center"
+          mb={2}
+        >
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/events_dashboard")}
+            >
+              View Events
+            </Button>
+          </Grid>
 
-        <Grid item>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => navigate("/events_dashboard")}
-          >
-            View  Events
-          </Button>
+         
         </Grid>
-       
-      </Grid>
-
-
+      </Paper>
     </Box>
   );
 };

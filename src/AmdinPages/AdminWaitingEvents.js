@@ -20,7 +20,7 @@ const ApprovedEvents = () => {
         const email = parsed?.email;
         const role = parsed?.role;
 
-        const res = await axios.post("http://localhost:8000/auth/applied_event", {
+        const res = await axios.post("https://backend-l2dd.onrender.com/auth/applied_event", {
           email,
           role,
         });
@@ -64,7 +64,7 @@ const ApprovedEvents = () => {
           eventDate: event.eventDate,
         };
 
-        await axios.post("http://localhost:8000/auth/approve_status", payload);
+        await axios.post("https://backend-l2dd.onrender.com/auth/approve_status", payload);
       }
 
       alert("Approved selected users");
@@ -92,7 +92,7 @@ const ApprovedEvents = () => {
         eventDate: event.eventDate,
       };
 
-      await axios.post("http://localhost:8000/auth/approve_status", payload);
+      await axios.post("https://backend-l2dd.onrender.com/auth/approve_status", payload);
       alert("User approved");
 
       setApprovedEvents((prev) => prev.filter((e) => e._id !== eventId));

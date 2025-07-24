@@ -24,7 +24,7 @@ const LandingPage = () => {
   const [displayUsers, setDisplayUsers] = useState(0);
   const [loading, setLoading] = useState(true);
 useEffect(() => {
-  fetch("http://localhost:8000/auth/count", {
+  fetch("https://backend-l2dd.onrender.com/auth/count", {
     method: "GET",
   })
     .then((res) => res.json())

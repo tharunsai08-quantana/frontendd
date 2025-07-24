@@ -11,9 +11,9 @@ import {
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 
 const generateCaptcha = () => {
-  const chars = ""; // added characters here
+  const chars = "123456789"; // added characters here
   let captcha = "";
-  for (let i = 0; i < 1; i++) { // make captcha 6 chars instead of 1
+  for (let i = 0; i < 6; i++) { // make captcha 6 chars instead of 1
     captcha += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return captcha;
@@ -37,7 +37,7 @@ const Login = () => {
     }
 
  try {
-  const response = await fetch(`http://localhost:8000/auth/login`, {
+  const response = await fetch(`https://backend-l2dd.onrender.com/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -23,7 +23,7 @@ const AppliedEvents = () => {
 
   const fetchAppliedEvents = async () => {
     try {
-      const res = await axios.post("http://localhost:8000/auth/applied_event", {
+      const res = await axios.post("https://backend-l2dd.onrender.com/auth/applied_event", {
         email,
         role,
       });
@@ -38,7 +38,7 @@ const AppliedEvents = () => {
 
   const handleDelete = async (eventId) => {
     try {
-      await axios.post("http://localhost:8000/auth/delete_event", {
+      await axios.post("https://backend-l2dd.onrender.com/auth/delete_event", {
         email,
         eventId,
       });

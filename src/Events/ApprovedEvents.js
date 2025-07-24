@@ -14,7 +14,7 @@ const ApprovedEvents = () => {
   useEffect(() => {
     const fetchApprovedEvents = async () => {
       try {
-        const res = await axios.post("http://localhost:8000/auth/applied_event", { email,role });
+        const res = await axios.post("https://backend-l2dd.onrender.com/auth/applied_event", { email,role });
         const approved = res.data.data?.filter((e) => e.status === "Approved") || [];
         setApprovedEvents(approved);
       } catch (err) {

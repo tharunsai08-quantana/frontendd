@@ -26,7 +26,7 @@ const AllEvents = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const email = user?.email;
 
-      const res = await axios.post("http://localhost:8000/auth/show_events", {
+      const res = await axios.post("https://backend-l2dd.onrender.com/auth/show_events", {
         email,
       });
 
@@ -79,7 +79,7 @@ const AllEvents = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8000/auth/apply_event",
+        "https://backend-l2dd.onrender.com/auth/apply_event",
         payload
       );
 

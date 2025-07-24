@@ -52,7 +52,7 @@ const CreateEventForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/auth/create_event",
+        "https://backend-l2dd.onrender.com/auth/create_event",
         eventData,
         {
           headers: {

@@ -16,7 +16,7 @@ const AttendedUsersTable = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/auth/attended_user"); // Update if you use full API URL
+      const res = await axios.get("https://backend-l2dd.onrender.com/auth/attended_user"); // Update if you use full API URL
       setUsers(res.data.data || []);
     } catch (err) {
       console.error("Failed to fetch attended users:", err);
