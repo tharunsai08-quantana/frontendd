@@ -119,6 +119,7 @@ useEffect(() => {
             variant="contained"
             size="large"
             color="secondary"
+            alignItems="center"
             onClick={handleGoToLogin}
             sx={{ mt: 4 }}
           >
@@ -175,7 +176,7 @@ useEffect(() => {
               }}
             >
               <Typography variant="h6" color="white" gutterBottom>
-                Total Users Attended
+                Total Users
               </Typography>
               <Typography
                 variant="h3"

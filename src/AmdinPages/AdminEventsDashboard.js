@@ -7,7 +7,7 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
-
+import CreateEventForm from "./CreateEventForm";
 import AdminAllEvents from "./AdminAllEvents";
 import AdminWaitingEvents from "./AdminWaitingEvents";
 import AdminApprovedEvents from "./AdminApprovedEvents";
@@ -47,6 +47,7 @@ const AdminEventsDashboard = () => {
             value={view}
             onChange={(e) => setView(e.target.value)}
           >
+            <FormControlLabel value="Create Event" control={<Radio />} label="Create Event" />
             <FormControlLabel value="all" control={<Radio />} label="All Events" />
             <FormControlLabel value="applied" control={<Radio />} label="Waiting Events" />
             <FormControlLabel value="approved" control={<Radio />} label="Approved Events" />
@@ -56,6 +57,7 @@ const AdminEventsDashboard = () => {
       </Box>
 
       <Box sx={{ width: "100%", maxWidth: "1200px", px: 2 }}>
+        {view === "Create Event" && <CreateEventForm />}
         {view === "all" && <AdminAllEvents />}
         {view === "applied" && <AdminWaitingEvents />}
         {view === "approved" && <AdminApprovedEvents />}

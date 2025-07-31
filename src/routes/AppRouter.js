@@ -7,12 +7,11 @@ import Signup from '../pages/Signup';
 import ForgotPassword from '../pages/ForgotPassword';
 import Dashboard from '../pages/Dashboard';
 import UnderMaintenance from '../pages/UnderMaintenance';
-import CreateEventForm from '../Events/CreateEventForm';
+import CreateEventForm from '../AmdinPages/CreateEventForm';
 import EventsDashboard from '../Events/EventsDashboard';
 import AdminEventsDashboard from '../AmdinPages/AdminEventsDashboard';
 import Mdashboard from '../mediater/Mdashboard';
 import NoToken from '../components/NoToken';
-import LayoutWrapper from './LayoutWrapper';
 
 const ProtectedRoute = ({ children, role }) => {
   const token = localStorage.getItem("token");
@@ -33,20 +32,18 @@ const EventsRoleSwitcher = () => {
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<LayoutWrapper><LandingPage /></LayoutWrapper>} />
-      <Route path="/login" element={<LayoutWrapper><Login /></LayoutWrapper>} />
-      <Route path="/signup" element={<LayoutWrapper><Signup /></LayoutWrapper>} />
-      <Route path="/forgot_password" element={<LayoutWrapper><ForgotPassword /></LayoutWrapper>} />
-      <Route path="/dashboard" element={<LayoutWrapper><Dashboard /></LayoutWrapper>} />
-      <Route path="/faq" element={<LayoutWrapper><UnderMaintenance /></LayoutWrapper>} />
-      <Route path="/client" element={<LayoutWrapper><Mdashboard /></LayoutWrapper>} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot_password" element={<ForgotPassword />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/faq" element={<UnderMaintenance />} />
+      <Route path="/client" element={<Mdashboard />} />
       <Route
         path="/create-event"
         element={
           <ProtectedRoute role="admin">
-            <LayoutWrapper>
-              <CreateEventForm />
-            </LayoutWrapper>
+            <CreateEventForm />
           </ProtectedRoute>
         }
       />
@@ -54,13 +51,11 @@ const AppRouter = () => {
         path="/events_dashboard"
         element={
           <ProtectedRoute>
-            <LayoutWrapper>
-              <EventsRoleSwitcher />
-            </LayoutWrapper>
+            <EventsRoleSwitcher />
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<LayoutWrapper><LandingPage /></LayoutWrapper>} />
+      <Route path="*" element={<LandingPage />} />
     </Routes>
   );
 };
