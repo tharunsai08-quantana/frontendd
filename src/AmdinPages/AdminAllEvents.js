@@ -9,6 +9,10 @@ import {
   Box,
   Snackbar,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   TextField,
 } from "@mui/material";
 import axios from "axios";
@@ -125,145 +129,58 @@ const AdminAllEvents = () => {
     <>
       <Grid container spacing={3} mt={2} px={3}>
         {events.map((event) => {
-          const isEditing = editingEventId === event.eventId;
-
           return (
             <Grid item xs={12} md={6} lg={4} key={event._id}>
               <Card
                 sx={{
                   width: "100%",
-                  height: "auto",
+                  minHeight: 280,
+                  maxHeight: 400,
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
                   backgroundColor: "#e0f7fa",
-                  boxShadow: 2,
+                  boxShadow: 3,
                   borderRadius: 2,
-                  p: 2,
+                  overflow: "hidden",
                 }}
               >
-                <CardContent>
-                  {isEditing ? (
-                    <>
-                      <TextField
-                        label="Title"
-                        value={editedEvent.title}
-                        onChange={(e) => handleFieldChange("title", e.target.value)}
-                        fullWidth
-                        margin="dense"
-                      />
-                      <TextField
-                        label="Description"
-                        value={editedEvent.description}
-                        onChange={(e) =>
-                          handleFieldChange("description", e.target.value)
-                        }
-                        fullWidth
-                        multiline
-                        margin="dense"
-                      />
-                      <TextField
-                        label="Speaker"
-                        value={editedEvent.speaker}
-                        onChange={(e) =>
-                          handleFieldChange("speaker", e.target.value)
-                        }
-                        fullWidth
-                        margin="dense"
-                      />
-                      <TextField
-                        label="Date"
-                        type="date"
-                        value={editedEvent.date?.slice(0, 10)}
-                        onChange={(e) => handleFieldChange("date", e.target.value)}
-                        fullWidth
-                        margin="dense"
-                        InputLabelProps={{ shrink: true }}
-                      />
-                      <TextField
-                        label="Location"
-                        value={editedEvent.location}
-                        onChange={(e) =>
-                          handleFieldChange("location", e.target.value)
-                        }
-                        fullWidth
-                        margin="dense"
-                      />
-                      <TextField
-                        label="Image URL"
-                        value={editedEvent.image}
-                        onChange={(e) => handleFieldChange("image", e.target.value)}
-                        fullWidth
-                        margin="dense"
-                      />
-                      <TextField
-                        label="Hosted By"
-                        value={editedEvent.hostedBy}
-                        onChange={(e) =>
-                          handleFieldChange("hostedBy", e.target.value)
-                        }
-                        fullWidth
-                        margin="dense"
-                      />
-                      <TextField
-                        label="Organizer"
-                        value={editedEvent.organizer}
-                        onChange={(e) =>
-                          handleFieldChange("organizer", e.target.value)
-                        }
-                        fullWidth
-                        margin="dense"
-                      />
-                      <TextField
-                        label="Category"
-                        value={editedEvent.category}
-                        onChange={(e) =>
-                          handleFieldChange("category", e.target.value)
-                        }
-                        fullWidth
-                        margin="dense"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Typography variant="h6" gutterBottom>
-                        {event.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" mb={1}>
-                        {event.description}
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Speaker:</strong> {event.speaker}
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Date:</strong>{" "}
-                        {new Date(event.date || event.eventDate).toLocaleDateString()}
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Location:</strong> {event.location}
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Hosted By:</strong> {event.hostedBy}
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Organizer:</strong> {event.organizer}
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Category:</strong> {event.category}
-                      </Typography>
-                    </>
-                  )}
+                <CardContent sx={{ maxHeight: 300, overflowY: "auto" }}>
+                  <Typography variant="h6" gutterBottom noWrap>
+                    {event.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    mb={1}
+                    sx={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}
+                  >
+                    {event.description}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Speaker:</strong> {event.speaker}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Date:</strong>{" "}
+                    {new Date(event.date || event.eventDate).toLocaleDateString()}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Location:</strong> {event.location}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Hosted By:</strong> {event.hostedBy}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Organizer:</strong> {event.organizer}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Category:</strong> {event.category}
+                  </Typography>
                 </CardContent>
-                <Box textAlign="right">
-                  {isEditing ? (
-                    <Button variant="contained" onClick={handleSave}>
-                      Save
-                    </Button>
-                  ) : (
-                    <Button variant="outlined" onClick={() => handleEdit(event)}>
-                      Edit
-                    </Button>
-                  )}
+                <Box textAlign="right" p={1}>
+                  <Button variant="outlined" onClick={() => handleEdit(event)}>
+                    Edit
+                  </Button>
                 </Box>
               </Card>
             </Grid>
@@ -271,6 +188,92 @@ const AdminAllEvents = () => {
         })}
       </Grid>
 
+      {/* Edit Modal Dialog */}
+      <Dialog
+        open={!!editingEventId}
+        onClose={() => setEditingEventId(null)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Edit Event</DialogTitle>
+        <DialogContent dividers>
+          <TextField
+            label="Title"
+            value={editedEvent.title}
+            onChange={(e) => handleFieldChange("title", e.target.value)}
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            label="Description"
+            value={editedEvent.description}
+            onChange={(e) => handleFieldChange("description", e.target.value)}
+            fullWidth
+            multiline
+            rows={3}
+            margin="dense"
+          />
+          <TextField
+            label="Speaker"
+            value={editedEvent.speaker}
+            onChange={(e) => handleFieldChange("speaker", e.target.value)}
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            label="Date"
+            type="date"
+            value={editedEvent.date?.slice(0, 10)}
+            onChange={(e) => handleFieldChange("date", e.target.value)}
+            fullWidth
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="Location"
+            value={editedEvent.location}
+            onChange={(e) => handleFieldChange("location", e.target.value)}
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            label="Image URL"
+            value={editedEvent.image}
+            onChange={(e) => handleFieldChange("image", e.target.value)}
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            label="Hosted By"
+            value={editedEvent.hostedBy}
+            onChange={(e) => handleFieldChange("hostedBy", e.target.value)}
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            label="Organizer"
+            value={editedEvent.organizer}
+            onChange={(e) => handleFieldChange("organizer", e.target.value)}
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            label="Category"
+            value={editedEvent.category}
+            onChange={(e) => handleFieldChange("category", e.target.value)}
+            fullWidth
+            margin="dense"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditingEventId(null)}>Cancel</Button>
+          <Button variant="contained" onClick={handleSave}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar Notification */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}
