@@ -28,7 +28,8 @@ const ValidateCodePage = () => {
     }
 
     try {
-      const res = await axios.post("https://backend-l2dd.onrender.com/auth/event_verification", { code });
+      const key = code.trim();
+      const res = await axios.post("https://backend-l2dd.onrender.com/auth/event_verification", { key });
 
       setSnackbar({
         open: true,

@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import {
-  Box, IconButton, TextField, Paper, Typography, CircularProgress
+  Box,
+  IconButton,
+  TextField,
+  Paper,
+  Typography,
+  CircularProgress
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -24,11 +29,21 @@ const ChatBot = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/ask_llm', { query: input });
+      // ✅ Get email and role from user object in localStorage
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      const email = storedUser?.email || 'unknown';
+      const role = storedUser?.role || 'guest';
+
+      const response = await axios.post('http://localhost:8000/auth/ask_llm', {
+        query: input,
+        email,
+        role,
+      });
+
       const botMsg = { sender: 'bot', text: response.data.answer || 'No reply' };
       setMessages((prev) => [...prev, botMsg]);
     } catch (error) {
-      setMessages((prev) => [...prev, { sender: 'bot', text: 'Error fetching response.' }]);
+      setMessages((prev) => [...prev, { sender: 'bot', text: 'Under Development.' }]);
     }
 
     setLoading(false);

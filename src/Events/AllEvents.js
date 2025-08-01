@@ -148,87 +148,107 @@ const AllEvents = () => {
 
   return (
     <>
-      <Grid
-        container
-        spacing={3}
-        justifyContent="center"
-        alignItems="stretch"
-        mt={2}
-      >
+      <Grid container spacing={4} justifyContent="center" mt={2}>
         {events.map((event) => (
-          <Grid item xs={12} md={10} lg={8} key={event._id}>
-           <Card
-  sx={{
-    width: "100%",
-    height: 260, // Fixed height for uniform card size
-    backgroundColor: "#f5f5f5",
-    boxShadow: 3,
-    borderRadius: 3,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    p: 2,
-    transition: "0.3s",
-    "&:hover": {
-      boxShadow: 6,
-    },
-  }}
->
-
-              <CardContent
+<Grid item xs={12} sm={6} md={4} lg={4} key={event._id}>
+            <Card
+              sx={{
+                width: "100%",
+                minHeight: 300,
+                backgroundColor: "#ffffff",
+                boxShadow: 4,
+                borderRadius: 3,
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-6px)",
+                  boxShadow: 8,
+                },
+              }}
+            >
+              {/* Header */}
+              <Box
                 sx={{
+                  height: 80,
+                  background: "linear-gradient(135deg, #42a5f5, #478ed1)",
                   display: "flex",
-                  flexWrap: "wrap",
+                  alignItems: "center",
                   justifyContent: "space-between",
-                  gap: 2,
+                  px: 2,
+                  color: "#fff",
                 }}
               >
-                {/* Left Content */}
-                <Box sx={{ flex: 1, minWidth: "250px" }}>
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", mb: 1, wordBreak: "break-word" }}
-                  >
-                    {event.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mb: 1, whiteSpace: "pre-wrap" }}
-                  >
-                    {event.description}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Date:</strong>{" "}
-                    {new Date(event.eventDate).toLocaleDateString()}
-                  </Typography>
-                </Box>
-
-                {/* Right Content */}
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {event.title}
+                </Typography>
                 <Box
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    minWidth: "180px",
-                    gap: 1,
+                    backgroundColor: "#fff",
+                    color: "#1976d2",
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: 1,
+                    fontSize: "0.8rem",
+                    fontWeight: 600,
                   }}
                 >
-                  <Typography variant="body2">
-                    <strong>Speaker:</strong> {event.speaker}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Location:</strong> {event.location}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => handleApply(event)}
-                  >
-                    Apply
-                  </Button>
+                  {new Date(event.eventDate).toLocaleDateString()}
                 </Box>
-              </CardContent>
+              </Box>
+
+              {/* Content */}
+              <CardContent
+  sx={{
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+  }}
+>
+  <Typography
+    variant="body2"
+    color="text.secondary"
+    sx={{ whiteSpace: "pre-wrap" }}
+  >
+    {event.description}
+  </Typography>
+
+  <Grid container spacing={2}>
+    <Grid item xs={12} sm={6}>
+      <Typography variant="body2">
+        <strong>Speaker:</strong> {event.speaker || "TBA"}
+      </Typography>
+      <Typography variant="body2">
+        <strong>Location:</strong> {event.location}
+      </Typography>
+    </Grid>
+  </Grid>
+
+  {/* Apply Now button in separate row and centered */}
+  <Box sx={{ textAlign: "center", mt: 2 }}>
+    <Button
+      variant="contained"
+      size="medium"
+      sx={{
+        textTransform: "none",
+        borderRadius: 2,
+        px: 4,
+        py: 1.2,
+        fontWeight: 600,
+        backgroundColor: "#1976d2",
+        "&:hover": {
+          backgroundColor: "#125ea6",
+        },
+      }}
+      onClick={() => handleApply(event)}
+    >
+      Apply Now
+    </Button>
+  </Box>
+</CardContent>
+
             </Card>
           </Grid>
         ))}
