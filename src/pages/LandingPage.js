@@ -129,15 +129,17 @@ useEffect(() => {
       </Grid>
 
       {/* Countup Section */}
-      <Box
-        sx={{
-          mt: 6,
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          gap: 4,
-        }}
-      >
+<Box
+  sx={{
+    mt: 3, 
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    gap: 4,
+    flexWrap: "wrap", // ensures responsiveness on smaller screens
+  }}
+>
+
         {loading ? (
           <CircularProgress color="inherit" />
         ) : (

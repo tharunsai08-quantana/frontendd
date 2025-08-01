@@ -55,10 +55,20 @@ const ApprovedEvents = () => {
       ) : (
         <Grid container spacing={2} sx={{ mt: 2 }}>
           {approvedEvents.map((event) => (
-            <Grid item xs={12} md={6} key={event._id}>
-              <Card sx={{ p: 2 }}>
-                <CardContent>
-                  {/* Title and Date Row */}
+            <Grid item xs={12} md={4} key={event._id}>
+       <Card
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: 3,
+                  boxShadow: 4,
+                  overflow: "hidden",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  "&:hover": {
+                    transform: "translateY(-5px)",
+                    boxShadow: 8,
+                  },
+                }}
+              >             <CardContent>
                   <Grid container spacing={1} alignItems="center">
                     <Grid item xs={12} sm={8}>
                       <Typography
