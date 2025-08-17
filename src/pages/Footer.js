@@ -49,7 +49,7 @@ const Footer= () => {
             color: '#FFFFFF',
           }}
         >
-          © {currentYear} Windsurf  -  Log Analyzer
+          © {currentYear} Event Management
         </Typography>
        
         

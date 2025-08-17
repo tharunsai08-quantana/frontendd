@@ -4,6 +4,8 @@ import AppRouter from './routes/AppRouter';
 import Box from '@mui/material/Box';
 import NavBarMain from './pages/NavBarMain';
 import Chatbot from './chatBot/Chatbot';
+import FormQueue from './advanced/FormQueue';
+
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -19,8 +21,9 @@ const App = () => {
       <Router>
         <NavBarMain />
         <Box sx={{ flex: 1 }}>
-          <AppRouter />
-          <Chatbot />
+          {/* <AppRouter />
+          <Chatbot /> */}
+          <FormQueue />
         </Box>
       </Router>
     </Box>
